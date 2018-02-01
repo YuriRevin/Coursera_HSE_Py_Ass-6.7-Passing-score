@@ -1,29 +1,33 @@
-myFile = open("input.txt", "r", encoding="utf8")
-k = int(myFile.readline())
-myList = []
-for line in myFile:
-    newLine = line.split()
-    if int(newLine[-1]) >= 40 and int(newLine[-2]) >= 40 \
-            and int(newLine[-3]) >= 40:
-        myList.append(newLine)
-myFile.close()
-myList.sort(key=lambda a: int(a[-1]) + int(a[-2]) + int(a[-3]))
-myList.reverse()
-konk = []
-for i in myList:
-    sum = int(i[-1]) + int(i[-2]) + int(i[-3])
-    konk.append(sum)
-n = len(konk)
+fileInput = open('input.txt', 'r', encoding='utf8')
+scoreList = []
+k = int(fileInput.readline())
+for line in fileInput:
+    i = line.split()
+    if int(i[-1]) >= 40 and int(i[-2]) >= 40 and int(i[-3]) >= 40:
+        scoreList.append(int(i[-1]) + int(i[-2]) + int(i[-3]))
+fileInput.close()
+lenScoreLIst = len(scoreList)
+scoreCount = []
+tList = []
+for item in scoreList:
+    if item not in tList:
+        tList.append(item)
+        t = (scoreList.count(item), item)
+        scoreCount.append(t)
+scoreCount.sort(key=lambda x: -x[1])
+lenScoreCount = len(scoreCount)
 
 
-def konkurs(n, k, konk):
-    if n <= k:
+def minScore(lSL, lSC, k, sC):
+    if lSL <= k:
         return 0
-    elif konk[k] == konk[0]:
+    elif sC[0][0] > k:
         return 1
-    for i in range(k, 0, -1):
-        if konk[i] < konk[i - 1]:
-            return konk[i - 1]
+    t = 0
+    for i in range(0, lSC):
+        t += sC[i][0]
+        if t > k:
+            return sC[i - 1][1]
 
 
-print(konkurs(n, k, konk))
+print(minScore(lenScoreLIst, lenScoreCount, k, scoreCount))
